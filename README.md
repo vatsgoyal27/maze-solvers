@@ -1,5 +1,5 @@
 
-# Maze Solver (Turtle Graphics Simulation)
+# Maze Solver (Turtle Graphics Simulation)(WIP)
 
 This project simulates navigating a grid-based maze using three different pathfinding algorithms: **Breadth-First Search (BFS)**, **Depth-First Search (DFS)**, and **Dead-End Filling**.
 
