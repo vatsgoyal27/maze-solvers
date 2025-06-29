@@ -1,7 +1,7 @@
 
 # Maze Solver (Turtle Graphics Simulation)(WIP)
 
-This project simulates navigating a grid-based maze using three different pathfinding algorithms: **Breadth-First Search (BFS)**, **Depth-First Search (DFS)**, and **Dead-End Filling**.
+This project simulates navigating a grid-based maze using different pathfinding algorithms.
 
 Built with Python and `turtle`, the simulation visually demonstrates how each algorithm explores and solves the maze.
 
@@ -11,6 +11,7 @@ Built with Python and `turtle`, the simulation visually demonstrates how each al
 
 - **main.py**  
   Runs the maze simulation with all three solvers. Visualizes their paths in different colors:  
+  - Yellow: Flood Fill (uses a dynamic cost map)
   - Blue: BFS (shortest path)  
   - Green: DFS (non-optimal path)  
   - Red: Dead-End Solver (eliminates all dead ends)
@@ -50,7 +51,7 @@ You'll see a visual simulation window. Each algorithm will take its turn solving
 
 ## To-Do
 
-- Add more maze solving algorithms (eg: A*, Dijkstra, Floodfill)
+- Add more maze solving algorithms (eg: A*, Dijkstra)
 
 ---
 

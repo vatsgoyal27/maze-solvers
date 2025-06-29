@@ -1,6 +1,6 @@
 from turtle import tracer, Screen
 from maze import grid
-from logic import BFS, DFS, DeadEndSolver
+from logic import BFS, DFS, DeadEndSolver, FloodFill
 from drawers import Mouse
 import time
 
@@ -11,6 +11,7 @@ tracer(0)
 my_mouse_bfs = Mouse("blue")
 my_mouse_dfs = Mouse("green")
 my_mouse_dead = Mouse("red")
+my_mouse_flood = Mouse("yellow")
 grid_mouse = Mouse("black")
 grid_mouse.draw_grid()
 grid_mouse.draw_walls(grid)
@@ -19,6 +20,13 @@ screen.update()
 tracer(1)
 
 target = [8,9]
+
+ff = FloodFill(grid, my_mouse_flood.mouse_pos, [target])
+ff_path = ff.find_path()
+print(ff_path)
+while ff_path:
+    my_mouse_flood.move_actual(ff_path[0])
+    ff_path.pop(0)
 
 b = BFS(grid, my_mouse_bfs.mouse_pos, target)
 shortest_path = b.bfs_path()
@@ -37,7 +45,6 @@ dead_path = f.solve()
 while dead_path:
     my_mouse_dead.move_actual(dead_path[0])
     dead_path.pop(0)
-
 
 screen.exitonclick()
 

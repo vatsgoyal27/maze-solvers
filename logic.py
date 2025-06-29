@@ -187,3 +187,61 @@ class DeadEndSolver:
     def solve(self):
         self.fill_dead_ends()
         return self.reconstruct_path()
+
+from collections import deque
+
+class FloodFill:
+    def __init__(self, grid, start_cell, goal_cells):
+        self.grid = grid
+        self.start = tuple(start_cell)
+        self.goal_cells = [tuple(g) for g in goal_cells]
+        self.rows = 18
+        self.cols = 18
+        self.cost = [[255 for _ in range(self.cols)] for _ in range(self.rows)]
+        self.parent = {}  # For path reconstruction
+
+    def get_neighbors(self, r, c):
+        neighbors = []
+        if r > 0 and 'n' not in self.grid[r][c][2]:
+            neighbors.append((r - 1, c))
+        if r < self.rows - 1 and 's' not in self.grid[r][c][2]:
+            neighbors.append((r + 1, c))
+        if c < self.cols - 1 and 'e' not in self.grid[r][c][2]:
+            neighbors.append((r, c + 1))
+        if c > 0 and 'w' not in self.grid[r][c][2]:
+            neighbors.append((r, c - 1))
+        return neighbors
+
+    def fill_cost_map(self):
+        q = deque()
+        for goal in self.goal_cells:
+            gr, gc = goal
+            self.cost[gr][gc] = 0
+            q.append(goal)
+            self.parent[goal] = None  # Goal has no parent
+
+        while q:
+            r, c = q.popleft()
+            for nr, nc in self.get_neighbors(r, c):
+                if self.cost[nr][nc] == 255:  # Unvisited
+                    self.cost[nr][nc] = self.cost[r][c] + 1
+                    self.parent[(nr, nc)] = (r, c)
+                    q.append((nr, nc))
+
+    def reconstruct_path(self):
+        path = []
+        current = self.start
+
+        while current is not None:
+            path.append(list(current))
+            current = self.parent.get(current)
+
+        return path
+
+    def find_path(self):
+        self.fill_cost_map()
+
+        if self.cost[self.start[0]][self.start[1]] == 255:
+            return None  # No path to any goal
+
+        return self.reconstruct_path()
