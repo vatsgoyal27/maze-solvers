@@ -20,10 +20,11 @@ Built with Python and `turtle`, the simulation visually demonstrates how each al
   Generates the grid and walls. Includes functions to add or remove walls and builds a complex maze with loops and decoys.
 
 - **logic.py**  
-  Contains the core logic for three solvers:
+  Contains the core logic for solvers:
   - `BFS`: Finds the shortest path.
   - `DFS`: Explores deeply and may find non-optimal paths.
   - `DeadEndSolver`: Fills dead ends to isolate the true path.
+  - `FloodFill`: Finds the shortest path using a cost map.
 
 - **drawers.py**  
   Defines the `Mouse` class used to draw the maze, walls, and animate the robot's movement on the grid.
