@@ -245,3 +245,116 @@ class FloodFill:
             return None  # No path to any goal
 
         return self.reconstruct_path()
+
+import heapq
+
+class AStar:
+    def __init__(self, grid, start_cell, goal_cell):
+        self.grid = grid
+        self.start = tuple(start_cell)
+        self.goal = tuple(goal_cell)
+        self.rows = 18
+        self.cols = 18
+        self.parent = {}
+        self.cost_so_far = [[float('inf') for _ in range(self.cols)] for _ in range(self.rows)]
+
+    def get_neighbors(self, r, c):
+        neighbors = []
+        if r > 0 and 'n' not in self.grid[r][c][2]:
+            neighbors.append((r - 1, c))
+        if r < self.rows - 1 and 's' not in self.grid[r][c][2]:
+            neighbors.append((r + 1, c))
+        if c < self.cols - 1 and 'e' not in self.grid[r][c][2]:
+            neighbors.append((r, c + 1))
+        if c > 0 and 'w' not in self.grid[r][c][2]:
+            neighbors.append((r, c - 1))
+        return neighbors
+
+    def heuristic(self, cell):
+        # Manhattan distance to the goal
+        return abs(cell[0] - self.goal[0]) + abs(cell[1] - self.goal[1])
+
+    def find_path(self):
+        heap = []
+        heapq.heappush(heap, (0 + self.heuristic(self.start), 0, self.start))  # (priority, cost, position)
+        self.parent[self.start] = None
+        self.cost_so_far[self.start[0]][self.start[1]] = 0
+
+        while heap:
+            _, cost, current = heapq.heappop(heap)
+
+            if current == self.goal:
+                return self.reconstruct_path()
+
+            for neighbor in self.get_neighbors(*current):
+                nr, nc = neighbor
+                new_cost = self.cost_so_far[current[0]][current[1]] + 1
+
+                if new_cost < self.cost_so_far[nr][nc]:
+                    self.cost_so_far[nr][nc] = new_cost
+                    self.parent[neighbor] = current
+                    priority = new_cost + self.heuristic(neighbor)
+                    heapq.heappush(heap, (priority, new_cost, neighbor))
+
+        return None  # No path
+
+    def reconstruct_path(self):
+        path = []
+        current = self.goal
+
+        while current is not None:
+            path.append(list(current))
+            current = self.parent.get(current)
+
+        path.reverse()  # Optional
+        return path
+
+class Dijkstra:
+    def __init__(self, grid, start_cell, goal_cell):
+        self.grid = grid
+        self.start = tuple(start_cell)
+        self.goal = tuple(goal_cell)
+        self.rows = 18
+        self.cols = 18
+
+    def get_neighbors(self, r, c):
+        neighbors = []
+        if r > 0 and 'n' not in self.grid[r][c][2]:
+            neighbors.append((r - 1, c))
+        if r < self.rows - 1 and 's' not in self.grid[r][c][2]:
+            neighbors.append((r + 1, c))
+        if c < self.cols - 1 and 'e' not in self.grid[r][c][2]:
+            neighbors.append((r, c + 1))
+        if c > 0 and 'w' not in self.grid[r][c][2]:
+            neighbors.append((r, c - 1))
+        return neighbors
+
+    def find_path(self):
+        open_set = []
+        heapq.heappush(open_set, (0, self.start))  # (g_score, cell)
+        parent = {self.start: None}
+        g_score = {self.start: 0}
+
+        while open_set:
+            current_g, current = heapq.heappop(open_set)
+
+            if current == self.goal:
+                return self.reconstruct_path(parent)
+
+            for neighbor in self.get_neighbors(current[0], current[1]):
+                tentative_g = current_g + 1
+                if neighbor not in g_score or tentative_g < g_score[neighbor]:
+                    g_score[neighbor] = tentative_g
+                    heapq.heappush(open_set, (tentative_g, neighbor))
+                    parent[neighbor] = current
+
+        return None  # No path
+
+    def reconstruct_path(self, parent):
+        path = []
+        current = self.goal
+        while current is not None:
+            path.append(list(current))
+            current = parent.get(current)
+        path.reverse()
+        return path

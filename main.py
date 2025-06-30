@@ -1,6 +1,6 @@
 from turtle import tracer, Screen
 from maze import grid
-from logic import BFS, DFS, DeadEndSolver, FloodFill
+from logic import BFS, DFS, DeadEndSolver, FloodFill, AStar, Dijkstra
 from drawers import Mouse
 import time
 
@@ -12,6 +12,8 @@ my_mouse_bfs = Mouse("blue")
 my_mouse_dfs = Mouse("green")
 my_mouse_dead = Mouse("red")
 my_mouse_flood = Mouse("yellow")
+my_mouse_astar = Mouse("cyan")
+my_mouse_dij = Mouse("magenta")
 grid_mouse = Mouse("black")
 grid_mouse.draw_grid()
 grid_mouse.draw_walls(grid)
@@ -21,9 +23,21 @@ tracer(1)
 
 target = [8,9]
 
+ast = AStar(grid, my_mouse_astar.mouse_pos, target)
+ast_path = ast.find_path()
+while ast_path:
+    my_mouse_astar.move_actual(ast_path[0])
+    ast_path.pop(0)
+
 ff = FloodFill(grid, my_mouse_flood.mouse_pos, [target])
 ff_path = ff.find_path()
-print(ff_path)
+
+dij = Dijkstra(grid, my_mouse_dij.mouse_pos, target)
+dij_path = dij.find_path()
+while dij_path:
+    my_mouse_dij.move_actual(dij_path[0])
+    dij_path.pop(0)
+
 while ff_path:
     my_mouse_flood.move_actual(ff_path[0])
     ff_path.pop(0)
