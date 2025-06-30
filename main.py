@@ -29,15 +29,14 @@ while ast_path:
     my_mouse_astar.move_actual(ast_path[0])
     ast_path.pop(0)
 
-ff = FloodFill(grid, my_mouse_flood.mouse_pos, [target])
-ff_path = ff.find_path()
-
 dij = Dijkstra(grid, my_mouse_dij.mouse_pos, target)
 dij_path = dij.find_path()
 while dij_path:
     my_mouse_dij.move_actual(dij_path[0])
     dij_path.pop(0)
 
+ff = FloodFill(grid, my_mouse_flood.mouse_pos, [target])
+ff_path = ff.find_path()
 while ff_path:
     my_mouse_flood.move_actual(ff_path[0])
     ff_path.pop(0)
